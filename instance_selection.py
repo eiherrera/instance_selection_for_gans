@@ -37,6 +37,7 @@ def get_embeddings_from_loader(dataloader,
         if verbose:
             dataloader = tqdm(dataloader, desc='Extracting embeddings')
         for data in dataloader:
+            print(data)
             if len(data) == 2:
                 images, label = data
                 images = images.cuda()  
