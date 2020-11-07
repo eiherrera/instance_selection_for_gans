@@ -34,7 +34,7 @@ class CustomDataset(Dataset):
         sample = {'image': image, 'path': path}
 
         if self.transform:
-            sample = self.transform(sample)
+            sample['image'] = self.transform(sample['image'])
 
         return sample
 
