@@ -3,6 +3,9 @@ import os
 from torch.utils.data import Dataset
 from skimage import io
 import torch
+import torchvision
+import torchvision.transforms as transforms
+from instance_selection import select_instances
 
 class CustomDataset(Dataset):
     """Custom dataset."""
@@ -36,7 +39,11 @@ class CustomDataset(Dataset):
         return sample
 
 def selecter(target_folder):
+    transform = transforms.Compose([transforms.ToTensor(),
+                                transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                                                     std=[0.5, 0.5, 0.5])])
     dataset = CustomDataset(target_folder)
+    instance_selected_dataset = select_instances(dataset, retention_ratio=50)
 
 def main():
     parser = argparse.ArgumentParser(

@@ -31,12 +31,12 @@ def get_embeddings_from_loader(dataloader,
                                return_labels=False,
                                verbose=False):
     embeddings = []
-    labels = []
+    paths = []
 
     with torch.no_grad():
         for data in dataloader:
             if len(data) == 2:
-                images, label = data
+                images, path = data['image'], data['path']
                 images = images.cuda()  
             else:
                 images = data.cuda()
@@ -44,13 +44,13 @@ def get_embeddings_from_loader(dataloader,
 
             embed = embedder(images)
             embeddings.append(embed.cpu())
-            labels.append(label)
+            paths.append(path)
 
     embeddings = torch.cat(embeddings, dim=0)
-    labels = torch.cat(labels, dim=0)
+    paths = paths
 
     if return_labels:
-        return embeddings, labels
+        return embeddings, paths
     else:
         return embeddings
 
