@@ -34,8 +34,6 @@ def get_embeddings_from_loader(dataloader,
     labels = []
 
     with torch.no_grad():
-        # if verbose:
-        #     dataloader = tqdm(dataloader, desc='Extracting embeddings')
         for data in dataloader:
             print(data)
             if len(data) == 2:
