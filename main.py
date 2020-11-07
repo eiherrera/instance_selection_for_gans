@@ -1,7 +1,7 @@
 import argparse
 import os
 from torch.utils.data import Dataset
-from skimage import io
+from PIL import Image
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -30,7 +30,7 @@ class CustomDataset(Dataset):
             idx = idx.tolist()
 
         path = self.filepaths[idx]
-        image = io.imread(path)
+        image = Image.open(path).convert('RGB')
         sample = {'image': image, 'path': path}
 
         if self.transform:
