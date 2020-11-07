@@ -28,12 +28,14 @@ def get_embedder(embedding):
 
 def get_embeddings_from_loader(dataloader,
                                embedder,
-                               return_labels=False,
+                               return_paths=False,
                                verbose=False):
     embeddings = []
     paths = []
 
     with torch.no_grad():
+        if verbose:
+            dataloader = tqdm(dataloader, desc='Extracting embeddings')
         for data in dataloader:
             if len(data) == 2:
                 images, path = data['image'], data['path']
@@ -49,7 +51,7 @@ def get_embeddings_from_loader(dataloader,
     embeddings = torch.cat(embeddings, dim=0)
     paths = paths
 
-    if return_labels:
+    if return_paths:
         return embeddings, paths
     else:
         return embeddings
@@ -131,9 +133,9 @@ def select_instances(dataset,
                             pin_memory=True)
 
     embedder = get_embedder(embedding)
-    embeddings, labels = get_embeddings_from_loader(dataloader, 
+    embeddings, paths = get_embeddings_from_loader(dataloader, 
                                                     embedder, 
-                                                    return_labels=True, 
+                                                    return_paths=True, 
                                                     verbose=True)
 
     keep_indices = get_keep_indices(embeddings,
