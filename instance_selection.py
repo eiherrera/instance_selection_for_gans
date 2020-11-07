@@ -35,10 +35,8 @@ def get_embeddings_from_loader(dataloader,
 
     with torch.no_grad():
         for data in dataloader:
-            print(data)
             if len(data) == 2:
                 images, label = data
-                print(images)
                 images = images.cuda()  
             else:
                 images = data.cuda()
