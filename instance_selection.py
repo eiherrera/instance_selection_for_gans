@@ -37,19 +37,13 @@ def get_embeddings_from_loader(dataloader,
         if verbose:
             dataloader = tqdm(dataloader, desc='Extracting embeddings')
         for data in dataloader:
-            if len(data) == 2:
-                images, path = data['image'], data['path']
-                images = images.cuda()  
-            else:
-                images = data.cuda()
-                labels.append(torch.zeros(len(images)))
-
+            images, path = data['image'], data['path']
+            images = images.cuda()
             embed = embedder(images)
             embeddings.append(embed.cpu())
             paths.append(path)
 
     embeddings = torch.cat(embeddings, dim=0)
-    paths = paths
 
     if return_paths:
         return embeddings, paths
@@ -137,6 +131,7 @@ def select_instances(dataset,
                                                     return_paths=True, 
                                                     verbose=True)
 
+    print(paths)
     keep_indices, indices = get_keep_indices(embeddings,
                                     paths,
                                     density_measure,
