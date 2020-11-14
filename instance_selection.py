@@ -83,8 +83,7 @@ def get_keep_indices(embeddings,
 
     cutoff = np.percentile(scores, (100 - retention_ratio))
     keep_mask = torch.from_numpy(scores > cutoff).bool()
-    print(keep_mask)
-    # keep_indices.append(class_indices[keep_mask])
+    keep_indices.append(paths[keep_mask])
     keep_indices = torch.cat(keep_indices, dim=0)
     return keep_indices
 
