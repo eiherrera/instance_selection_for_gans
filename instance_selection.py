@@ -77,8 +77,8 @@ def get_keep_indices(embeddings,
 
     cutoff = np.percentile(scores, (100 - retention_ratio))
     keep_mask = torch.from_numpy(scores > cutoff).bool()
-    # indices = indices[keep_mask]
-    return keep_mask, indices
+    indices = indices[keep_mask]
+    return indices
 
 
 def select_instances(dataset,
@@ -131,15 +131,11 @@ def select_instances(dataset,
                                                     return_paths=True, 
                                                     verbose=True)
 
-    print(paths)
     keep_indices, indices = get_keep_indices(embeddings,
                                     paths,
                                     density_measure,
                                     retention_ratio=retention_ratio,
                                     verbose=True)
-
-    print(indices.shape)
-    print(keep_indices.shape)
 
     if indices_filepath is not None:
         torch.save(keep_indices, indices_filepath)
