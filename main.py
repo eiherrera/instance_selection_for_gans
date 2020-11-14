@@ -19,7 +19,7 @@ class CustomDataset(Dataset):
                 on a sample.
         """
         self.root_dir = root_dir
-        filenames = os.listdir(self.root_dir)[:10]
+        filenames = os.listdir(self.root_dir)
         self.filepaths = [os.path.join(self.root_dir, filename) for filename in filenames]
         self.transform = transform
 
@@ -39,12 +39,12 @@ class CustomDataset(Dataset):
 
         return sample
 
-def selecter(target_folder, new_folder):
+def selecter(target_folder, new_folder, retention_ratio=50):
     transform = transforms.Compose([transforms.ToTensor(),
                                 transforms.Normalize(mean=[0.5, 0.5, 0.5],
                                                      std=[0.5, 0.5, 0.5])])
     dataset = CustomDataset(target_folder, transform=transform)
-    instance_selected_dataset = select_instances(dataset, retention_ratio=50)
+    instance_selected_dataset = select_instances(dataset, retention_ratio=retention_ratio)
     for el in instance_selected_dataset:
         suffix = el['path'].split('/')[-1]
         new_path = os.path.join(new_folder, suffix)
@@ -56,9 +56,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
-    parser.add_argument('--dataset',      help='Folder containing the dataset', dest='target_folder', required=True)
-    parser.add_argument('--new-folder',   help='New folder to store the filtered images', dest='new_folder', required=True)
-    
+    parser.add_argument('--dataset',            help='Folder containing the dataset', dest='target_folder', required=True)
+    parser.add_argument('--new-folder',         help='Folder to store the filtered images', dest='new_folder', required=True)
+    parser.add_argument('--retention-ratio',    help='Percentage of images to keep after filter', dest='retention_ratio', type=int, default=50)
 
     selecter(**vars(parser.parse_args()))
 
