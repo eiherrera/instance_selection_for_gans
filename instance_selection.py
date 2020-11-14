@@ -62,7 +62,7 @@ def get_keep_indices(embeddings,
                      density_measure, 
                      retention_ratio, 
                      verbose=False):
-    indices = np.arange(len(paths))
+    indices = torch.from_numpy(np.arange(len(paths)))
 
     # unique_labels = torch.unique(labels)
     # if verbose:
