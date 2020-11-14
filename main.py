@@ -19,7 +19,7 @@ class CustomDataset(Dataset):
                 on a sample.
         """
         self.root_dir = root_dir
-        filenames = os.listdir(self.root_dir)[:256]
+        filenames = os.listdir(self.root_dir)[:257]
         self.filepaths = [os.path.join(self.root_dir, filename) for filename in filenames]
         self.transform = transform
 
