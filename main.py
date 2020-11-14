@@ -43,6 +43,9 @@ def selecter(target_folder):
                                 transforms.Normalize(mean=[0.5, 0.5, 0.5],
                                                      std=[0.5, 0.5, 0.5])])
     dataset = CustomDataset(target_folder, transform=transform)
+    for el in dataset:
+        print(el['path'])
+    print('-----------------------------')
     instance_selected_dataset = select_instances(dataset, retention_ratio=50)
     for el in instance_selected_dataset:
         print(el['path'])
