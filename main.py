@@ -1,5 +1,6 @@
 import argparse
 import os
+from shutil import copyfile
 from torch.utils.data import Dataset
 from PIL import Image
 import torch
@@ -38,17 +39,16 @@ class CustomDataset(Dataset):
 
         return sample
 
-def selecter(target_folder):
+def selecter(target_folder, new_folder):
     transform = transforms.Compose([transforms.ToTensor(),
                                 transforms.Normalize(mean=[0.5, 0.5, 0.5],
                                                      std=[0.5, 0.5, 0.5])])
     dataset = CustomDataset(target_folder, transform=transform)
-    for el in dataset:
-        print(el['path'])
-    print('-----------------------------')
+    # os.mkdir(new_folder)
     instance_selected_dataset = select_instances(dataset, retention_ratio=50)
     for el in instance_selected_dataset:
-        print(el['path'])
+        suffix = el['path'].split('/')[-1]
+        print(suffix)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -56,7 +56,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
-    parser.add_argument('--target-folder',      help='Target the folder containing the images to project from', dest='target_folder', required=True)
+    parser.add_argument('--dataset',      help='Folder containing the dataset', dest='target_folder', required=True)
+    parser.add_argument('--new-folder',   help='New folder to store the filtered images', dest='new_folder', required=True)
+
     selecter(**vars(parser.parse_args()))
 
 if __name__ == "__main__":
