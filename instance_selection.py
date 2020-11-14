@@ -58,32 +58,33 @@ def get_embeddings_from_loader(dataloader,
 
 
 def get_keep_indices(embeddings, 
-                     labels, 
+                     paths, 
                      density_measure, 
                      retention_ratio, 
                      verbose=False):
     keep_indices = []
 
-    unique_labels = torch.unique(labels)
-    if verbose:
-        unique_labels = tqdm(unique_labels, desc='Scoring instances')
+    # unique_labels = torch.unique(labels)
+    # if verbose:
+    #     unique_labels = tqdm(unique_labels, desc='Scoring instances')
 
-    for label in unique_labels:
-        class_indices = torch.where(labels == label)[0]
-        class_embeddings = embeddings[class_indices]
+    # for label in unique_labels:
+    # class_indices = torch.where(labels == label)[0]
+    # class_embeddings = embeddings[class_indices]
 
-        if density_measure == 'ppca':
-            scores = PPCA(class_embeddings)
-        elif density_measure == 'gaussian':
-            scores = GaussianModel(class_embeddings)
-        elif density_measure == 'nn_dist':
-            # make negative so that larger values are better
-            scores = -compute_nearest_neighbour_distances(class_embeddings, 
-                                                          nearest_k=5)
+    if density_measure == 'ppca':
+        scores = PPCA(embeddings)
+    elif density_measure == 'gaussian':
+        scores = GaussianModel(embeddings)
+    elif density_measure == 'nn_dist':
+        # make negative so that larger values are better
+        scores = -compute_nearest_neighbour_distances(embeddings, 
+                                                        nearest_k=5)
 
-        cutoff = np.percentile(scores, (100 - retention_ratio))
-        keep_mask = torch.from_numpy(scores > cutoff).bool()
-        keep_indices.append(class_indices[keep_mask])
+    cutoff = np.percentile(scores, (100 - retention_ratio))
+    keep_mask = torch.from_numpy(scores > cutoff).bool()
+    print(keep_mask)
+    # keep_indices.append(class_indices[keep_mask])
     keep_indices = torch.cat(keep_indices, dim=0)
     return keep_indices
 
