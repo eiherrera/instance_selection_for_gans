@@ -45,7 +45,7 @@ def selecter(target_folder):
     dataset = CustomDataset(target_folder, transform=transform)
     instance_selected_dataset = select_instances(dataset, retention_ratio=50)
     for el in instance_selected_dataset:
-        el['path']
+        print(el['path'])
 
 def main():
     parser = argparse.ArgumentParser(
