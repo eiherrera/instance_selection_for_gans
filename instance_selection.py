@@ -62,7 +62,7 @@ def get_keep_indices(embeddings,
                      density_measure, 
                      retention_ratio, 
                      verbose=False):
-    keep_indices = []
+    indices = np.arange(len(paths))
 
     # unique_labels = torch.unique(labels)
     # if verbose:
@@ -83,9 +83,9 @@ def get_keep_indices(embeddings,
 
     cutoff = np.percentile(scores, (100 - retention_ratio))
     keep_mask = torch.from_numpy(scores > cutoff).bool()
-    # keep_indices.append(np.array(paths)[keep_mask])
-    # keep_indices = torch.cat(keep_indices, dim=0)
-    return keep_mask
+    indices.append(indices[keep_mask])
+    indices = torch.cat(keep_indices, dim=0)
+    return indices
 
 
 def select_instances(dataset,

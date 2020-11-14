@@ -44,8 +44,8 @@ def selecter(target_folder):
                                                      std=[0.5, 0.5, 0.5])])
     dataset = CustomDataset(target_folder, transform=transform)
     instance_selected_dataset = select_instances(dataset, retention_ratio=50)
-    for el in instance_selected_dataset:
-        print(el)
+    for index, el in enumerate(instance_selected_dataset):
+        print(index)
 
 def main():
     parser = argparse.ArgumentParser(
