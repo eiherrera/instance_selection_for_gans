@@ -46,7 +46,7 @@ def get_embeddings_from_loader(dataloader,
     embeddings = torch.cat(embeddings, dim=0)
 
     if return_paths:
-        return embeddings, paths
+        return embeddings, paths[0]
     else:
         return embeddings
 
