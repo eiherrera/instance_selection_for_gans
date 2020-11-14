@@ -131,7 +131,7 @@ def select_instances(dataset,
                                                     return_paths=True, 
                                                     verbose=True)
 
-    keep_indices, indices = get_keep_indices(embeddings,
+    keep_indices = get_keep_indices(embeddings,
                                     paths,
                                     density_measure,
                                     retention_ratio=retention_ratio,
