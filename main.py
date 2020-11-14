@@ -44,11 +44,11 @@ def selecter(target_folder, new_folder):
                                 transforms.Normalize(mean=[0.5, 0.5, 0.5],
                                                      std=[0.5, 0.5, 0.5])])
     dataset = CustomDataset(target_folder, transform=transform)
-    # os.mkdir(new_folder)
     instance_selected_dataset = select_instances(dataset, retention_ratio=50)
     for el in instance_selected_dataset:
         suffix = el['path'].split('/')[-1]
-        print(suffix)
+        new_path = os.path.join(new_folder, suffix)
+        copyfile(el['path'], new_path)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -58,6 +58,7 @@ def main():
 
     parser.add_argument('--dataset',      help='Folder containing the dataset', dest='target_folder', required=True)
     parser.add_argument('--new-folder',   help='New folder to store the filtered images', dest='new_folder', required=True)
+    
 
     selecter(**vars(parser.parse_args()))
 
